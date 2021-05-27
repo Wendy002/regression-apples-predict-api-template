@@ -24,6 +24,7 @@
 # Helper Dependencies
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import LabelEncoder
 import pickle
 import json
 
@@ -59,10 +60,24 @@ def _preprocess_data(data):
     # ---------------------------------------------------------------
 
     # ----------- Replace this code with your own preprocessing steps --------
+    feature_vector_df = feature_vector_df[feature_vector_df.Commodities.str.contains("APPLE GOLDEN DELICIOUS")]
+    predict_vector = feature_vector_df[["Weight_Kg","Low_Price","High_Price","Sales_Total","Total_Qty_Sold","Total_Kg_Sold","Stock_On_Hand"]]
     
 
-    feature_vector_df = feature_vector_df[(feature_vector_df['Commodities'] == 'APPLE GOLDEN DELICIOUS')]
-    predict_vector = feature_vector_df[['Total_Qty_Sold','Stock_On_Hand']]
+    
+    Region = LabelEncoder()
+    Apple_Container = LabelEncoder()
+    Grade = LabelEncoder()
+
+
+
+    predict_vector["Province_n"] = Region.fit_transform(feature_vector_df["Province"])
+    predict_vector["Container_n"] = Apple_Container.fit_transform(feature_vector_df["Container"])
+    predict_vector["Size_Grade_n"] = Grade.fit_transform(feature_vector_df["Size_Grade"])
+
+
+    #feature_vector_df = feature_vector_df[(feature_vector_df['Commodities'] == 'APPLE GOLDEN DELICIOUS')]
+    #predict_vector = feature_vector_df[['Total_Qty_Sold','Stock_On_Hand']]
                                 
     # ------------------------------------------------------------------------
 
